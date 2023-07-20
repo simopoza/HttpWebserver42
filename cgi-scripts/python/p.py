@@ -13,8 +13,8 @@ print("")
 print("Hello - Second CGI Program")
 print("")
 print("")
-print("
-   Hello %s %s
-   " % (first_name, last_name))
+print("")
+   # Hello %s %s
+   # " % (first_name, last_name))
 print("")
 print("")

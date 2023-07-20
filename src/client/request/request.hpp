@@ -49,6 +49,7 @@ class request
 		std::string					queryString;
 		std::string					interpreterPath;
 		std::string					outputFile;
+		bool						CGI;
     public:
         request();
         request(const request &obj);

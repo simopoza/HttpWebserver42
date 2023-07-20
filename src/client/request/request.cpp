@@ -96,7 +96,7 @@ void	request::setHeadersInVector()
         prev = pos + 1;
     }
     this->headerLines.push_back(this->headers.substr(prev));
-	// printVector(this->headerLines);
+	printVector(this->headerLines);
 	this->checkHeadersErrors();
 }
 

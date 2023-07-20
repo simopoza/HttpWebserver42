@@ -25,8 +25,13 @@ void	request::waitForChildProcess(int pid)
 {
 	int	status = 0;
 	waitpid(pid, &status, 0);
-	this->endPost = 1;
-	this->goToClient(this->outputFile, "200");
+	// std::cout << "l9lawi 6" << std::endl;
+		// send response 
+		std::cout << "out" << std::endl;
+		// this->filePost.close();
+		this->endPost = 1;
+		this->CGI = true;
+		this->goToClient(this->outputFile, "200");
 }
 
 void	request::setInterpreterPath()

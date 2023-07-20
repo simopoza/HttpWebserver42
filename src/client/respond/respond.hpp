@@ -20,6 +20,7 @@ class respond
 		std::fstream	File;
 		std::string		responseType;
 		std::string		redirection;
+		bool			CGI;
 	public:
 		respond();
 		respond(const respond &obj);

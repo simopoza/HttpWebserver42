@@ -22,9 +22,22 @@ void	supervisor::collectMethods(std::vector<std::string> line, location& tmpLoca
 	tmpLocation.setMethods(tmpVec);
 }
 
+int	checkIsADirectory(std::string path)
+{
+	const char* directory = path.c_str();
+	std::cout << "FULL : " << directory << "\n";
+	DIR* directoryStream = opendir(directory);
+	if (directoryStream != NULL)
+	{
+		closedir(directoryStream);
+		return (1);
+	}
+	return (0);
+}
+
 void	supervisor::collectUploadPath(std::vector<std::string> line, location &tmpLocation)
 {
-	if (line.size() > 2 || line[1][0] != '/' || line.size() == 1)
+	if (line.size() > 2  || line.size() == 1 || !checkIsADirectory(line[1]))
 		throw Exception("Error: Upload Should Be As Follow\nupload /example");
 	tmpLocation.setUpload(line[1]);
 }

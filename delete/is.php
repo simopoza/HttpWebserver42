@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($avatar_error === 0) {
             if ($avatar_size < 2000000) {
                 $avatar_name_new = uniqid('', true) . '.' . $avatar_actual_ext;
-                $avatar_destination = '/Users/sel-ouaf/Desktop/server/delete/images/' . $avatar_name_new;
+                $avatar_destination = './images/' . $avatar_name_new;
                 move_uploaded_file($avatar_tmp_name, $avatar_destination);
                 $_COOKIE['name'] = $_POST['name'];
                 $_COOKIE['email'] = $_POST['email'];
