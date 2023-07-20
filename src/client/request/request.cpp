@@ -117,6 +117,7 @@ void	request::separatePathFromQuery(std::string URL)
 	size_t	position;
 	size_t	pos;
 
+	std::cout << "jit hna" << std::endl;
 	if ((position = URL.find(".php")) != std::string::npos)
 	{
 		this->requestedPath = URL.substr(0, position + 4);
@@ -129,12 +130,17 @@ void	request::separatePathFromQuery(std::string URL)
 		std::cout << "extension " << this->scriptExtension << std::endl;
 		return ;
 	}
-	if ((position = URL.find(".pl")) != std::string::npos)
+	if ((position = URL.find(".py")) != std::string::npos)
 	{
 		this->requestedPath = URL.substr(0, position + 3);
 		if ((pos = URL.find("?")) != std::string::npos)
 			this->queryString = URL.substr(position + 4, URL.size() - (position + 4));
 		this->scriptExtension = URL.substr(position + 1, 2);
+		std::cout << "full URL " << URL << std::endl;
+		std::cout << "requested path  " << this->requestedPath << std::endl;
+		std::cout << "query " << this->queryString << std::endl;
+		std::cout << "extension " << this->scriptExtension << std::endl;
+		return ;
 	}
 	else
 		this->requestedPath = URL;
