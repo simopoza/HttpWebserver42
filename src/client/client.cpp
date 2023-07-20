@@ -29,6 +29,7 @@ void	client::servingTheClient()
     //if we done with the client we need to set a flag to drop this client.
 	this->request.clientFd = this->clientFd;
 	this->request.server = this->server;
+    this->request.CGI = false;
 
     if (this->stageForClient == 0){
         try{
@@ -43,6 +44,7 @@ void	client::servingTheClient()
         this->respond.fileToGet = this->getFile;
         this->respond.clientFd = this->clientFd;
         this->respond.redirection = this->request.redirection;
+        this->respond.CGI = this->request.CGI;
         this->startRespond();
     }
 }

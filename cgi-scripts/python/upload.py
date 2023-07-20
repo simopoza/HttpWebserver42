@@ -11,7 +11,7 @@ if fileitem.filename:
    # strip leading path from file name to avoid 
    # directory traversal attacks
    fn = os.path.basename(fileitem.filename)
-   open('www/uploads/' + fn, 'wb').write(fileitem.file.read())
+   open('./www/' + fn, 'wb').write(fileitem.file.read())
 
    message = 'The file "' + fn + '" was uploaded successfully'
    

@@ -96,7 +96,7 @@ void	request::setHeadersInVector()
         prev = pos + 1;
     }
     this->headerLines.push_back(this->headers.substr(prev));
-	// printVector(this->headerLines);
+	printVector(this->headerLines);
 	this->checkHeadersErrors();
 }
 
@@ -129,7 +129,7 @@ void	request::separatePathFromQuery(std::string URL)
 		std::cout << "extension " << this->scriptExtension << std::endl;
 		return ;
 	}
-	if ((position = URL.find(".pl")) != std::string::npos)
+	if ((position = URL.find(".py")) != std::string::npos)
 	{
 		this->requestedPath = URL.substr(0, position + 3);
 		if ((pos = URL.find("?")) != std::string::npos)

@@ -172,6 +172,7 @@ void	request::waitForChildProcess(int pid)
 		std::cout << "out" << std::endl;
 		// this->filePost.close();
 		this->endPost = 1;
+		this->CGI = true;
 		this->goToClient(this->outputFile, "200");
 }
 
@@ -180,9 +181,9 @@ void	request::setInterpreterPath()
 	// std::cout << "l0lawo" << std::endl;
 	// std::cout << this->scriptExtension << " extension" << std::endl;
 	if (this->scriptExtension == "php")
-		this->interpreterPath = "/Users/sel-ouaf/Desktop/server/cgi-bin/php-cgi";
-	else if (this->scriptExtension == "pl")
-		this->interpreterPath = "/usr/bin/perl";
+		this->interpreterPath = "/Users/mannahri/Desktop/server/cgi-bin/php-cgi";
+	else if (this->scriptExtension == "py")
+		this->interpreterPath = "/Users/mannahri/Desktop/server/cgi-bin/python-cgi";
 
 	// std::cout << "l9lawi " << this->interpreterPath << std::endl;
 }

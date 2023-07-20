@@ -36,21 +36,20 @@ void	respond::sendHeadersToClient()
 	else{
 		this->initResponseType();
 		returnStatOfRequest = "HTTP/1.1 " + std::to_string(this->statusRespond) + this->responseType +"\r\n";
-		std::cout << returnStatOfRequest;
 	}
 	// }
-	if (contentType != "Content-Type: NO_Extention")
-	{
+	// if (contentType != "Content-Type: NO_Extention")
+	// {
 		this->bufferSend = returnStatOfRequest + contentType + contentLength;
-		// std::cout << "Respond Header : " << this->bufferSend << std::endl;
-		this->lenToSend = returnStatOfRequest.size() + contentType.size() + contentLength.size();
-	}
-	else
-	{
-		this->bufferSend = returnStatOfRequest + contentLength;
 		std::cout << "Respond Header : " << this->bufferSend << std::endl;
-		this->lenToSend = returnStatOfRequest.size() + contentLength.size();
-	}
+		this->lenToSend = returnStatOfRequest.size() + contentType.size() + contentLength.size();
+	// }
+	// else
+	// {
+	// 	this->bufferSend = returnStatOfRequest + contentLength;
+	// 	std::cout << "Respond Header : " << this->bufferSend << std::endl;
+	// 	this->lenToSend = returnStatOfRequest.size() + contentLength.size();
+	// }
 }
 
 void	respond::initResponseType()
@@ -83,26 +82,6 @@ void	respond::initResponseType()
 	}
 	return;
 }
-
-/*
-".bmp"
-".jpg"
-".jpeg"
-".gif"
-".png"
-*/
-
-/*
-".mp4" (MPEG-4 Part 14)
-".avi" (Audio Video Interleave)
-".mov" (QuickTime Movie)
-".mkv" (Matroska Video)
-".wmv" (Windows Media Video)
-".flv" (Flash Video)
-".m4v" (MPEG-4 Video)
-".mpg" or ".mpeg" (MPEG Video)
-".webm" (WebM Video)
-*/
 
 int isExtension(std::string& filename, std::string& fileExtension)
 {
@@ -170,6 +149,7 @@ std::string	respond::findContentType()
 
 std::string respond::findLengthOfFile()
 {
+	std::string length;
     struct stat fileInfo;
     const char* filename = this->fileToGet.c_str();
 	// this->openFileToserve();
@@ -186,7 +166,10 @@ std::string respond::findLengthOfFile()
 		std::cout << "Error retrieving file size.\n";
         throw Exception ("Error retrieving file size.");
 	}
-    std::string length = "Content-Length: " + std::to_string(fileInfo.st_size);
+	if (!this->CGI)
+    	length = "Content-Length: " + std::to_string(fileInfo.st_size) + "\r\n\r\n";
+	else
+		length = "Content-Length: " + std::to_string(fileInfo.st_size);
     return length;
 }
 
@@ -200,12 +183,4 @@ void	respond::openFileToServe()
 		std::cout << "Error In Open File\n";
         exit(1);
 	}
-        // this->File.open(this->fileToGet, std::ios::in);
-        // if (!File)
-        // {
-        //     std::cout << "Error In Open File\n";
-        //     exit(1);
-        // }
-	// if (this->fileFd < 0)
-	// 	//
 }

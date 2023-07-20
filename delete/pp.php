@@ -9,7 +9,7 @@ ini_set('display_errors', 1);
 
  
 
-$target_dir = "/Users/sel-ouaf/Desktop/server/delete/images/";
+$target_dir = "./images/";
 
 $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
 

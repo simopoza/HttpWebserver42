@@ -46,13 +46,7 @@ void	request::PostMethod(std::string path)
 {
 	findTheLocation(path);
 	methodAllowd("POST");
-	//check if cgi on and path executable .php .py
-	//flag cgi
-	//file.pl
-	// if (this->locationWorkWith.getCGI() && access(path.c_str(), X_OK) && !cgi.empty())
-	// int flag = 1;
-
-		this->noChunckedRequest();
+	this->noChunckedRequest();
 }
 
 void	request::noChunckedRequest()
@@ -74,8 +68,6 @@ void	request::noChunckedRequest()
 	{
 		if (this->locationWorkWith.getCGI() && !this->scriptExtension.empty())
 		{
-			// std::cout << "ZBIIIIIII " << std::endl;
-			std::cout << "CGI" << std::endl;
 			this->filePost.close();
 			this->cgiHandler();
 		}
@@ -100,8 +92,13 @@ void	request::chunckedRequest()
 
 void	request::createTheUploadFile()
 {
+	int l = rand();
 	this->ExtentionType();
-	this->postFileName = "../../goinfre/" + std::to_string(this->clientFd) + "file";
+	if (this->locationWorkWith.getUpload().empty())
+		this->postFileName = "../../goinfre/" + std::to_string(this->clientFd) + std::to_string(l)  + "file." + this->extention;
+	else
+		this->postFileName = this->locationWorkWith.getUpload() + std::to_string(l) + "file." + this->extention;
+	
 	this->filePost.open(this->postFileName);
 }
 
@@ -109,7 +106,8 @@ void	request::ExtentionType()
 {
 	size_t place = this->contentType.find("/");
 	if (place != std::string::npos)
-		this->extention = this->contentType.substr(place+1, this->contentType.size()-(place+2));
+		this->extention = this->contentType.substr(place+1, this->contentType.size()-(place+1));
+	std::cout << "extension : " << this->extention << "\ncontetn : " << this->contentType << "\n";
 }
 
 //Search for all read/recv/write/send on a socket and check that, if an error is returned, the client is removed.
