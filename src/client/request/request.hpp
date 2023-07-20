@@ -22,6 +22,8 @@ class request
         std::ofstream				filePost;
         std::string					fileName;
 		std::string					postFileName;
+		char						**envp;
+		char						**av;
 		server						server;
         long						sizeReaded;
 		int							clientFd;
@@ -90,6 +92,9 @@ class request
 		void			cgiHandler();
 		void			setInterpreterPath();
 		void			waitForChildProcess(int pid);
+		void			prepareEnv();
+		void			SetUpInputOutputFiles();
+
 		class Exception : public std::exception
 		{
 			private:
