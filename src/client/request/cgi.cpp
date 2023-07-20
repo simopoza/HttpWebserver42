@@ -180,7 +180,7 @@ void	request::setInterpreterPath()
 	// std::cout << "l0lawo" << std::endl;
 	// std::cout << this->scriptExtension << " extension" << std::endl;
 	if (this->scriptExtension == "php")
-		this->interpreterPath = "/Users/mannahri/Desktop/webserv/php-cgi";
+		this->interpreterPath = "/Users/sel-ouaf/Desktop/server/cgi-bin/php-cgi";
 	else if (this->scriptExtension == "pl")
 		this->interpreterPath = "/usr/bin/perl";
 
