@@ -267,3 +267,4 @@ void	request::setInterpreterPath()
 // 		query = this->fullPath.substr(position + 1, this->fullPath.size() - (position + 1));
 // 	return (query);
 // }
+
