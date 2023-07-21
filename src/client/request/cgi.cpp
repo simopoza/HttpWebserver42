@@ -23,23 +23,34 @@ void	request::cgiHandler()
 
 void	request::waitForChildProcess(int pid)
 {
+	sleep(1);
 	int	status = 0;
-	waitpid(pid, &status, 0);
-	// std::cout << "l9lawi 6" << std::endl;
-		// send response 
-		std::cout << "out" << std::endl;
-		// this->filePost.close();
+	int result;
+	result  = waitpid(pid, &status, WNOHANG);
+	if (result == 0)
+	{
+		kill(pid, SIGKILL);
 		this->endPost = 1;
+		this->goToClient("DefaultErrorPages/1337.html", "1337");
+	}
+	else
+	{
 		this->CGI = true;
+		this->endPost = 1;
+		//function
+		/*
+		
+		*/
 		this->goToClient(this->outputFile, "200");
+	}
 }
 
 void	request::setInterpreterPath()
 {
 	if (this->scriptExtension == "php")
 		this->interpreterPath = "/Users/sel-ouaf/Desktop/server/cgi-bin/php-cgi";
-	else if (this->scriptExtension == "py")
-		this->interpreterPath = "/Users/sel-ouaf/Desktop/server/cgi-bin/python-cgi";
+	else if (this->scriptExtension == "pl")
+		this->interpreterPath = "/usr/bin/perl";
 	std::cout << "this is it " << this->interpreterPath << std::endl;
 }
 
@@ -84,9 +95,9 @@ void	request::prepareEnv()
 	av[2] = NULL;
 
 	if (this->method == "POST")
-		this->envp = new char*[15];
+		this->envp = new char*[16];
 	else
-		this->envp = new char*[13];
+		this->envp = new char*[14];
 	tmpp = "SERVER_PORT=2000";
 	this->envp[0] = new char[tmpp.size() + 1];
 	strcpy(this->envp[0], (tmpp.c_str()));
@@ -123,16 +134,20 @@ void	request::prepareEnv()
 	tmpp = "HTTP_ACCEPT=text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
 	this->envp[11] = new char[tmpp.size() + 1];
 	strcpy(this->envp[11], (tmpp.c_str()));
+	tmpp = "HTTP_COOKIE=" + this->cookies;
+	this->envp[12] = new char[tmpp.size() + 1];
+	strcpy(this->envp[12], (tmpp.c_str()));
 	if (this->method == "POST")
 	{
 		tmpp = "CONTENT_TYPE=" + this->contentType;
-		this->envp[12] = new char[tmpp.size() + 1];
-		strcpy(this->envp[12], (tmpp.c_str()));
-		tmpp = "CONTENT_LENGTH=" + contLength;
 		this->envp[13] = new char[tmpp.size() + 1];
 		strcpy(this->envp[13], (tmpp.c_str()));
-		this->envp[14] = NULL;
+		tmpp = "CONTENT_LENGTH=" + contLength;
+		this->envp[14] = new char[tmpp.size() + 1];
+		strcpy(this->envp[14], (tmpp.c_str()));
+		this->envp[15] = NULL;
 	}
 	else
-		this->envp[12] = NULL;
+		this->envp[13] = NULL;
+	std::cout << "Query in CGI is " << this->envp[4] << std::endl;
 }

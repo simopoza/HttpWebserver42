@@ -121,7 +121,7 @@ int isExtension(std::string& filename, std::string& fileExtension)
 			return 3;
 		}
 	}
-	fileExtension = "NO_Extention";
+	fileExtension = "text/plain\r\n";
     return 4; // No image extension found
 }
 

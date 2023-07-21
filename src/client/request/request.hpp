@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <fcntl.h>
+#include <signal.h>
 #include "../../config/config.hpp"
 #include <sys/types.h>
 #include <dirent.h>
@@ -95,6 +96,7 @@ class request
 		void			waitForChildProcess(int pid);
 		void			prepareEnv();
 		void			SetUpInputOutputFiles();
+		void			savePreviousDirectory();
 
 		class Exception : public std::exception
 		{

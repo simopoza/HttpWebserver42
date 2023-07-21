@@ -117,7 +117,6 @@ void	request::separatePathFromQuery(std::string URL)
 	size_t	position;
 	size_t	pos;
 
-	std::cout << "jit hna" << std::endl;
 	if ((position = URL.find(".php")) != std::string::npos)
 	{
 		this->requestedPath = URL.substr(0, position + 4);
@@ -130,7 +129,7 @@ void	request::separatePathFromQuery(std::string URL)
 		std::cout << "extension " << this->scriptExtension << std::endl;
 		return ;
 	}
-	if ((position = URL.find(".py")) != std::string::npos)
+	if ((position = URL.find(".pl")) != std::string::npos)
 	{
 		this->requestedPath = URL.substr(0, position + 3);
 		if ((pos = URL.find("?")) != std::string::npos)
@@ -365,12 +364,74 @@ void	request::ifNoDefaultFileSpecified()
 
 void	request::generateAutoIndex()
 {
-		std::ofstream autoIndex;
-		autoIndex.open("autoIndex.html", std::ios::out);
-		genAutoIndex(autoIndex);
-		autoIndex.close();
-		goToClient("autoIndex.html", "200");
+	std::ofstream autoIndex;
+	autoIndex.open("autoIndex.html", std::ios::out);
+	savePreviousDirectory();
+	genAutoIndex(autoIndex);
+	autoIndex.close();
+	goToClient("autoIndex.html", "200");
 }
+
+// void	request::savePreviousDirectory()
+// {
+// 	char 		cwd[1024];
+// 	std::string	tmpCurrentDirectory;
+// 	std::string PreviousDirectory;
+// 	std::string mainDirectory;
+
+// 	if (getcwd(cwd, sizeof(cwd)) != 0)
+// 		std::cout << "working directory 1" << cwd << std::endl;
+// 	mainDirectory = cwd;
+// 	chdir(this->fullPath.c_str());
+// 	if (getcwd(cwd, sizeof(cwd)) != 0)
+// 		std::cout << "working directory 2" << cwd << std::endl;
+// 	tmpCurrentDirectory = cwd;
+// 	if (chdir("..") == -1)
+// 		std::cout << "error directory" << std::endl;
+// 	if (getcwd(cwd, sizeof(cwd)) != 0)
+// 		std::cout << "previous directory is" << cwd << std::endl;
+// 	PreviousDirectory = cwd;
+// 	chdir(mainDirectory.c_str());
+// 	if (getcwd(cwd, sizeof(cwd)) != 0)
+// 		std::cout << "working directory 3 " << cwd << std::endl;
+// }
+
+// void	request::genAutoIndex(std::ofstream& output)
+// {
+// 	std::string tmpJoin;
+// 	std::string parentDir;
+// 	DIR* dir = opendir(this->fullPath.c_str());
+// 	if (dir)
+// 	{
+// 		output << "<html><head><title>Index of " << this->pathForIndex << "</title></head><body>";
+// 		output << "<h1>Index of " << this->pathForIndex << "</h1><hr><pre>";
+// 		struct dirent *entryPoint;
+// 		entryPoint = readdir(dir);
+// 		output << "<table>";
+// 		while ((entryPoint = readdir(dir)) != NULL)
+// 		{
+// 			struct stat fileInfo;
+// 			std::string tmp = this->fullPath + "/" + entryPoint->d_name;
+// 			stat(tmp.c_str(), &fileInfo);
+// 			if (entryPoint->d_name[0] == '.' && strlen(entryPoint->d_name) == 1)
+// 				continue;
+// 			else if(entryPoint->d_name[0] == '.' && entryPoint->d_name[1] == '.' && strlen(entryPoint->d_name) == 2)
+// 			{
+// 				tmpJoin = this->pathForIndex.substr(0, this->pathForIndex.find_last_of("/"));
+// 				std::cout << tmpJoin << std::endl;
+// 			}
+// 			else
+// 				tmpJoin = this->pathForIndex + "/" + entryPoint->d_name;
+// 			output << "<tr>";
+// 				output << "<td style=\"padding-right: 150px\"><a href=\"" << tmpJoin << "\">" << entryPoint->d_name << "</a></td>";
+// 				output << "<td style=\"padding-right: 150px\">" << ctime(&fileInfo.st_mtime) << "</td>";
+// 				output << "<td style=\"padding-right: 150px\">" << fileInfo.st_size << "</td>";
+// 			output << "</tr>";
+// 		}
+// 		output << "</table></pre><hr></body></html>";
+// 		closedir(dir);
+// 	}
+// }
 
 void	request::genAutoIndex(std::ofstream& output)
 {
@@ -387,17 +448,35 @@ void	request::genAutoIndex(std::ofstream& output)
 		while ((entryPoint = readdir(dir)) != NULL)
 		{
 			struct stat fileInfo;
-			std::string tmp = this->fullPath + "/" + entryPoint->d_name;
+			std::string tmp;
+			if (this->fullPath[this->fullPath.size() - 1] == '/')
+				tmp = this->fullPath + entryPoint->d_name;
+			else
+				tmp = this->fullPath + "/" + entryPoint->d_name;
+			// std::cout << "full path {" << this->fullPath << "}" << std::endl;
+			// std::cout << "tmp {" << tmp << "}" << std::endl;
 			stat(tmp.c_str(), &fileInfo);
 			if (entryPoint->d_name[0] == '.' && strlen(entryPoint->d_name) == 1)
 				continue;
 			else if(entryPoint->d_name[0] == '.' && entryPoint->d_name[1] == '.' && strlen(entryPoint->d_name) == 2)
 			{
-				tmpJoin = this->pathForIndex.substr(0, this->pathForIndex.find_last_of("/"));
+				if (this->pathForIndex == (this->locationWorkWith.getPathOfLocation() + "/"))
+					tmpJoin = this->pathForIndex.substr(0, this->pathForIndex.find_last_of("/"));
+				else
+				{
+					tmpJoin = this->pathForIndex.substr(0, this->pathForIndex.find_last_of("/"));
+					tmpJoin = tmpJoin.substr(0, tmpJoin.find_last_of("/"));
+				}
 				std::cout << tmpJoin << std::endl;
 			}
 			else
-				tmpJoin = this->pathForIndex + "/" + entryPoint->d_name;
+			{
+				if (this->pathForIndex[this->pathForIndex.size() - 1] == '/')
+					tmpJoin = this->pathForIndex + entryPoint->d_name;
+				else
+					tmpJoin = this->pathForIndex + "/" + entryPoint->d_name;
+			}
+			std::cout << "path for index {" << this->pathForIndex << "}" << std::endl; 
 			output << "<tr>";
 				output << "<td style=\"padding-right: 150px\"><a href=\"" << tmpJoin << "\">" << entryPoint->d_name << "</a></td>";
 				output << "<td style=\"padding-right: 150px\">" << ctime(&fileInfo.st_mtime) << "</td>";
@@ -409,12 +488,9 @@ void	request::genAutoIndex(std::ofstream& output)
 	}
 }
 
+
 void	request::goToClient(std::string file, std::string num)
 {
 	this->fileName = file;
 	throw Exception (num);
 }
-
-// [error] socket: unable to connect sock.c:282: Operation timed out
-//[error] socket: 176771072 address is unavailable.: Can't assign requested address
-//[alert] socket: read check timed out(30) sock.c:273: Operation timed out
