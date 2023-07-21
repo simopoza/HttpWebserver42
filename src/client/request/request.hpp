@@ -48,6 +48,8 @@ class request
 		std::string					interpreterPath;
 		std::string					outputFile;
 		bool						CGI;
+		std::string					cookies;
+
     public:
         request();
         request(const request &obj);
