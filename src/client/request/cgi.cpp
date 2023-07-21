@@ -37,18 +37,33 @@ void	request::waitForChildProcess(int pid)
 	{
 		this->CGI = true;
 		this->endPost = 1;
-		//function
-		/*
-		
-		*/
-		this->goToClient(this->outputFile, "200");
+		std::string status = checkIfRedirect();
+		this->goToClient(this->outputFile, status);
 	}
+}
+
+std::string request::checkIfRedirect()
+{
+	std::string line;
+	std::string stats = "200";
+	std::ifstream file;
+
+	file.open(this->outputFile, std::ios::in);
+	while (getline(file, line))
+	{
+		if (line.find("Status: ") != std::string::npos)
+		{
+			stats = "302";
+			return stats;
+		}
+	}
+	return stats;
 }
 
 void	request::setInterpreterPath()
 {
 	if (this->scriptExtension == "php")
-		this->interpreterPath = "/Users/sel-ouaf/Desktop/server/cgi-bin/php-cgi";
+		this->interpreterPath = "./cgi-bin/php-cgi";
 	else if (this->scriptExtension == "pl")
 		this->interpreterPath = "/usr/bin/perl";
 	std::cout << "this is it " << this->interpreterPath << std::endl;
@@ -67,7 +82,7 @@ void	request::SetUpInputOutputFiles()
 			std::cout << "errrrooooooor cgi" << std::endl;
 		}
 		dup2(input, 0);
-		// close(input);
+		close(input);
 	}
 	output = open(this->outputFile.c_str(), O_CREAT | O_WRONLY | O_TRUNC, 0777);
 	if (output == -1)
@@ -75,6 +90,7 @@ void	request::SetUpInputOutputFiles()
 		std::cout << "error " << std::endl;
 	}
 	dup2(output, 1);
+	close (output);
 }
 
 void	request::prepareEnv()

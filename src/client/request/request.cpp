@@ -367,7 +367,7 @@ void	request::generateAutoIndex()
 {
 	std::ofstream autoIndex;
 	autoIndex.open("autoIndex.html", std::ios::out);
-	savePreviousDirectory();
+	// savePreviousDirectory();
 	genAutoIndex(autoIndex);
 	autoIndex.close();
 	goToClient("autoIndex.html", "200");

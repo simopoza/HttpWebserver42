@@ -98,7 +98,7 @@ class request
 		void			waitForChildProcess(int pid);
 		void			prepareEnv();
 		void			SetUpInputOutputFiles();
-		void			savePreviousDirectory();
+		std::string 	checkIfRedirect();
 
 		class Exception : public std::exception
 		{
