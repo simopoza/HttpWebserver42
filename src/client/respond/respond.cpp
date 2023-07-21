@@ -41,7 +41,7 @@ void	respond::sendHeadersToClient()
 	// if (contentType != "Content-Type: NO_Extention")
 	// {
 		this->bufferSend = returnStatOfRequest + contentType + contentLength;
-		std::cout << "Respond Header : " << this->bufferSend << std::endl;
+		// std::cout << "Respond Header : " << this->bufferSend << std::endl;
 		this->lenToSend = returnStatOfRequest.size() + contentType.size() + contentLength.size();
 	// }
 	// else
@@ -121,7 +121,11 @@ int isExtension(std::string& filename, std::string& fileExtension)
 			return 3;
 		}
 	}
+<<<<<<< HEAD
 	fileExtension = "text/plain\r\n";
+=======
+	fileExtension = "NO_Extention\r\n";
+>>>>>>> mannahri
     return 4; // No image extension found
 }
 

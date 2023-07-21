@@ -6,7 +6,7 @@ void	request::collectHeaderData(std::string& line, std::string stringToFind)
 	if (place != std::string::npos)
 	{
 		std::string headerValue = line.substr(place + stringToFind.size(), line.size()-(stringToFind.size()+1));
-		std::cout << "HEAD IS : |" << headerValue << "|\n";
+		// std::cout << "HEAD IS : |" << headerValue << "|\n";
 		if (stringToFind == "Content-Type: ")
 			this->contentType = headerValue;
 		if (stringToFind == "Content-Length: ")
@@ -19,6 +19,8 @@ void	request::collectHeaderData(std::string& line, std::string stringToFind)
 			this->transferEncoding = headerValue;
 			this->flagTransferEncoding = true;
 		}
+		if (stringToFind == "Cookie: ")
+			this->cookies = headerValue;
 	}
 }
 

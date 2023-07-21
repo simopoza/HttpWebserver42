@@ -25,7 +25,7 @@ void	supervisor::collectMethods(std::vector<std::string> line, location& tmpLoca
 int	checkIsADirectory(std::string path)
 {
 	const char* directory = path.c_str();
-	std::cout << "FULL : " << directory << "\n";
+	// std::cout << "FULL : " << directory << "\n";
 	DIR* directoryStream = opendir(directory);
 	if (directoryStream != NULL)
 	{

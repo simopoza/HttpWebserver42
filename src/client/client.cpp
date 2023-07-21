@@ -63,7 +63,7 @@ void	client::startRespond()
     if (this->stageForRespond == 0)
     {
         this->respond.sendHeadersToClient();
-        std::cout << "Message sended : " << this->respond.bufferSend.c_str() << std::endl;
+        // std::cout << "Message sended : " << this->respond.bufferSend.c_str() << std::endl;
         send(this->clientFd, this->respond.bufferSend.c_str(), this->respond.lenToSend, 0);
         if (this->respond.fileFd < 0)
         {
@@ -81,7 +81,7 @@ void	client::startRespond()
     if (this->stageForRespond == 1){
         char buffer[1024];
         int r = read(this->respond.fileFd, buffer, 1024);
-        std::cout << "r IS : " << r << std::endl;
+        // std::cout << "r IS : " << r << std::endl;
         send(this->clientFd, buffer, r, 0);
         if (r == 0)
         {

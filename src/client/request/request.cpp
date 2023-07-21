@@ -41,7 +41,7 @@ void	request::ft_read()
 {
 	this->content.resize(8000);
 	this->currentLenReaded = read(this->clientFd, (void*)this->content.c_str(), 8000);
-	std::cout << "read is : " << this->currentLenReaded << std::endl;
+	// std::cout << "read is : " << this->currentLenReaded << std::endl;
 	// this->contentLenght -= this->currentLenReaded;
 	this->sizeReaded += this->currentLenReaded;
 }
@@ -93,6 +93,7 @@ void	request::setHeadersInVector()
 		this->collectHeaderData(tmp, "Content-Length: ");
 		this->collectHeaderData(tmp, "Transfer-Encoding: ");
 		this->collectHeaderData(tmp, "Content-Type: ");
+		this->collectHeaderData(tmp, "Cookie: ");
         prev = pos + 1;
     }
     this->headerLines.push_back(this->headers.substr(prev));
@@ -186,7 +187,7 @@ void	request::performDeleteOnFile()
 
 void	request::GetMethod(std::string path)
 {
-	std::cout << "IM HERE\n";
+	// std::cout << "IM HERE\n";
 	findTheLocation(path);
 	methodAllowd("GET");
 	handleGetRequest();
@@ -264,7 +265,7 @@ void	request::joinLocationWithRoot(std::string path, std::string root)
 int	request::checkIsADirectory()
 {
 	const char* directory = this->fullPath.c_str();
-	std::cout << "FULL : " << directory << "\n";
+	// std::cout << "FULL : " << directory << "\n";
 	DIR* directoryStream = opendir(directory);
 	if (directoryStream != NULL)
 	{
