@@ -4,21 +4,24 @@ void	request::cgiHandler()
 {
 	int	pid;
 
-	std::cout << "start cgi " << std::endl;
 	pid = fork();
 	if (pid == -1)
 	{
-		// fork has failed
+		std::cout << "fork() has failed" << std::endl;
+		this->endPost = 1;
+		this->goToClient("DefaultErrorPages/502.html", "502");
 	}
 	if (pid == 0)
 	{
 		prepareEnv();
 		SetUpInputOutputFiles();
 		execve(this->av[0], this->av, this->envp);
-		exit(0);
+		exit(1);
 	}
 	else if (pid > 0)
+	{
 		waitForChildProcess(pid);
+	}
 }
 
 void	request::waitForChildProcess(int pid)
@@ -31,7 +34,7 @@ void	request::waitForChildProcess(int pid)
 	{
 		kill(pid, SIGKILL);
 		this->endPost = 1;
-		this->goToClient("DefaultErrorPages/1337.html", "1337");
+		this->goToClient("DefaultErrorPages/504.html", "504");
 	}
 	else
 	{
@@ -66,7 +69,6 @@ void	request::setInterpreterPath()
 		this->interpreterPath = "./cgi-bin/php-cgi";
 	else if (this->scriptExtension == "pl")
 		this->interpreterPath = "/usr/bin/perl";
-	std::cout << "this is it " << this->interpreterPath << std::endl;
 }
 
 void	request::SetUpInputOutputFiles()
@@ -78,17 +80,13 @@ void	request::SetUpInputOutputFiles()
 	{
 		input = open(this->postFileName.c_str(), O_RDONLY, 0777);
 		if (input == -1)
-		{
-			std::cout << "errrrooooooor cgi" << std::endl;
-		}
+			exit(1);
 		dup2(input, 0);
 		close(input);
 	}
 	output = open(this->outputFile.c_str(), O_CREAT | O_WRONLY | O_TRUNC, 0777);
 	if (output == -1)
-	{
-		std::cout << "error " << std::endl;
-	}
+		exit(1);
 	dup2(output, 1);
 	close (output);
 }
@@ -165,5 +163,4 @@ void	request::prepareEnv()
 	}
 	else
 		this->envp[13] = NULL;
-	std::cout << "Query in CGI is " << this->envp[4] << std::endl;
 }

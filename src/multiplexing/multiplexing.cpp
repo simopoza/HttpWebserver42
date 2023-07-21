@@ -78,13 +78,8 @@ void	multiplexing::initialMaxFds()
 
 	for (iter = socket_fd.begin(); iter != socket_fd.end(); iter++)
 		FD_SET(*iter, &this->masterRead);
-
-	std::cout << "iter is : " << *std::prev(iter) << "\n";
-
 	// keep track of the biggest file descriptor
 	maxfds = *std::prev(iter);
-
-	std::cout << "maxfds is : " << maxfds << std::endl;
 }
 
 
@@ -131,7 +126,6 @@ void	multiplexing::acceptConnection()
 	// fcntl(this->newClient, F_SETFL, O_NONBLOCK);
 	if (this->newClient == -1)
 		throw Exception("Error : Accept Failed");
-	std::cout << "newClient is : " << this->newClient << "\n";
 	FD_SET(this->newClient, &this->masterRead); //add client to the master set.
 	if (this->newClient > this->maxfds)
 		this->maxfds = this->newClient;
@@ -172,7 +166,6 @@ void	multiplexing::startWorkingOnRequest(client &client)
 	// if ((client.request.contentLenght - client.request.sizeReaded) < 0 && client.request.currentLenReaded < 1024)
 	if (client.request.endPost == 1 || (client.request.headerEnds == 1 && (client.request.method == "GET" || client.request.method == "DELETE")))
 	{
-		std::cout << "---------------------You KNOW end-----------------------------\n";
 		client.stageForClient = 1;
 		FD_CLR(this->currentFdToWorkWith, &this->masterRead);
 		FD_SET(this->currentFdToWorkWith, &this->masterWrite);
@@ -186,7 +179,6 @@ void	multiplexing::sendRespondToClient(client& client)
 	}
 	if (client.stageForRespond == 2)
 	{
-		std::cout << "END\n";
 		FD_CLR(this->currentFdToWorkWith, &this->masterWrite);
 		close (this->currentFdToWorkWith);
 		this->serveTheClient.erase(this->currentFdToWorkWith);

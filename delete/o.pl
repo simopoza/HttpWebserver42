@@ -14,7 +14,8 @@ my $profession = $cgi->param('profession');
 my $sport = $cgi->param('sport');
  
 # Print the form data
-print $cgi->header('text/html');
+print $cgi->header('text/html\r\n\r\n');
+print "<!DOCTYPE html>";
 print "<html><head><title>Form Data</title></head><body>\n";
 print "<h2>Here is the infomation you sent!</h2>\n";
 print "<p>Name: $name</p>\n";

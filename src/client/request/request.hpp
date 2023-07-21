@@ -99,6 +99,7 @@ class request
 		void			prepareEnv();
 		void			SetUpInputOutputFiles();
 		std::string 	checkIfRedirect();
+		// ~request();
 
 		class Exception : public std::exception
 		{

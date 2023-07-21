@@ -121,7 +121,7 @@ int isExtension(std::string& filename, std::string& fileExtension)
 			return 3;
 		}
 	}
-	fileExtension = "text/plain\r\n";
+	fileExtension = "text/html\r\n";
     return 4; // No image extension found
 }
 
@@ -156,14 +156,14 @@ std::string respond::findLengthOfFile()
 	this->fileFd = open(this->fileToGet.c_str(), O_RDONLY);
 	if (this->fileFd < 0)
 	{
-		std::cout << "ALFILE ASHBI\n";
+		// std::cout << "ALFILE ASHBI\n";
 		this->statusRespond = 404;
 		return	"Content-Length: 500\r\n\r\n";
 	}
 	if (stat(filename, &fileInfo) != 0)
 	{
-		std::cout << "FILE NAME IS : " << filename << std::endl;
-		std::cout << "Error retrieving file size.\n";
+		// std::cout << "FILE NAME IS : " << filename << std::endl;
+		// std::cout << "Error retrieving file size.\n";
         throw Exception ("Error retrieving file size.");
 	}
 	if (!this->CGI)
@@ -180,7 +180,7 @@ void	respond::openFileToServe()
 	this->fileFd = open(this->fileToGet.c_str(), O_RDONLY);
 	if (this->fileFd < 0)
 	{
-		std::cout << "Error In Open File\n";
+		// std::cout << "Error In Open File\n";
         exit(1);
 	}
 }

@@ -55,7 +55,6 @@ void	request::noChunckedRequest()
 {
 	if (this->server.getClientBodySize() < this->contentLenght)
 	{
-		std::cout << "BODY SIZE\n";
 		this->endPost = 1;
 		this->goToClient("DefaultErrorPages/413.html", "413");
 	}
@@ -109,7 +108,4 @@ void	request::ExtentionType()
 	size_t place = this->contentType.find("/");
 	if (place != std::string::npos)
 		this->extention = this->contentType.substr(place+1, this->contentType.size()-(place+1));
-	std::cout << "extension : " << this->extention << "\ncontetn : " << this->contentType << "\n";
 }
-
-//Search for all read/recv/write/send on a socket and check that, if an error is returned, the client is removed.
